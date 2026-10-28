@@ -6,11 +6,11 @@ document.querySelector('#year').textContent = new Date().getFullYear();
 
 const originalContacts = document.querySelector('#clinic-contact-links').innerHTML;
 const originalDirections = document.querySelector('#clinic-directions').href;
-const branchButtons = document.querySelectorAll('[data-branch]');
-const bookingLinks = [...document.querySelectorAll('a[href="https://www.gonimo.in/smile-dental-care"]')].filter(link => !link.closest('.dentist'));
+const clinicSelector = document.querySelector('#clinic-selector');
+const bookingLinks = [...document.querySelectorAll('a[href="https://www.gonimo.in/smile-dental-care"]')].filter(link => !link.closest('.dentist, .booking-dropdown'));
 function selectBranch(branch) {
   const isChittoor = branch === 'chittoor';
-  branchButtons.forEach(button => { const active = button.dataset.branch === branch; button.classList.toggle('active', active); button.setAttribute('aria-pressed', String(active)); });
+  clinicSelector.value = branch;
   document.querySelector('#clinic-eyebrow').textContent = isChittoor ? 'SMILE DENTAL CARE · SOUTH CHITTOOR' : 'YOUR DENTAL CLINIC · CHERANALLOOR';
   document.querySelector('#announcement-location').textContent = isChittoor ? 'Your neighbourhood dental clinic in South Chittoor, Kochi' : 'Your Dental Clinic · Cheranalloor, Kochi';
   document.querySelector('.announcement-call').hidden = !isChittoor;
@@ -25,13 +25,27 @@ function selectBranch(branch) {
   document.querySelector('#clinic-contact-links').innerHTML = isChittoor ? originalContacts : '<div class="branch-pending"><span class="eyebrow">CHERANALLOOR BRANCH</span><h3>Let’s find the right clinic for you.</h3><p>Online booking for this branch will be available once its contact details are confirmed.</p><button class="button" type="button" id="choose-chittoor">View South Chittoor clinic <span>↗</span></button></div>';
   document.querySelector('#choose-chittoor')?.addEventListener('click', () => selectBranch('chittoor'));
   bookingLinks.forEach(link => { link.href = isChittoor ? 'https://www.gonimo.in/smile-dental-care' : '#contact'; if (isChittoor) { link.target = '_blank'; } else { link.removeAttribute('target'); } });
-  const headerBooking = document.querySelector('header .button');
-  headerBooking.innerHTML = isChittoor ? 'Book appointment <span>↗</span>' : 'Plan your visit <span>↗</span>';
   const brand = document.querySelector('header .brand');
   brand.querySelector(':scope > span').innerHTML = isChittoor ? 'smile<span class="brand-small">DENTAL CARE</span>' : 'your<span class="brand-small">DENTAL CLINIC</span>';
   brand.setAttribute('aria-label', isChittoor ? 'Smile Dental Care home' : 'Your Dental Clinic home');
   document.title = isChittoor ? 'Smile Dental Care | South Chittoor, Kochi' : 'Your Dental Clinic | Cheranalloor, Kochi';
   try { sessionStorage.setItem('smile-clinic', branch); } catch {}
 }
-branchButtons.forEach(button => button.addEventListener('click', () => selectBranch(button.dataset.branch)));
+clinicSelector.addEventListener('change', () => selectBranch(clinicSelector.value));
 try { if (sessionStorage.getItem('smile-clinic') === 'cheranalloor') selectBranch('cheranalloor'); } catch {}
+
+const bookingDropdowns = [...document.querySelectorAll('.booking-dropdown')];
+bookingDropdowns.forEach(dropdown => {
+  dropdown.addEventListener('toggle', () => {
+    if (dropdown.open) bookingDropdowns.forEach(other => { if (other !== dropdown) other.open = false; });
+  });
+  dropdown.querySelector('a').addEventListener('click', () => { dropdown.open = false; });
+});
+document.addEventListener('click', event => {
+  bookingDropdowns.forEach(dropdown => { if (!dropdown.contains(event.target)) dropdown.open = false; });
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') bookingDropdowns.forEach(dropdown => {
+    if (dropdown.open) { dropdown.open = false; dropdown.querySelector('summary').focus(); }
+  });
+});
