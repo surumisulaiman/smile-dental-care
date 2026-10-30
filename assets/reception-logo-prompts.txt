@@ -1,0 +1,4 @@
+Mode: built-in image generation, two image edits. Inputs: warm-clinic-reception.png (edit target), logo-variations.png (logo reference).
+Primary prompt: Add the left Your Smile logo as dimensional teal and gold wall signage above the reception counter. Preserve the interior, framing, materials and lighting.
+Alternate prompt: Add the right Your Dental Clinic logo with dominant Your lettering and smaller Smile endorsement as dimensional teal and gold wall signage. Preserve the same reception interior.
+Both versions: retain the DENTAL CLINIC descriptor and golden smile arc. No rectangular reference sheet, no additional lettering.

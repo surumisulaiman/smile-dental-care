@@ -1,0 +1,1 @@
+Built-in image generation edit. Source: user-supplied download.jpeg of Dr. Jesbin Assisi. Change only the bright yellow background to matte pale sea mist (#B9D8D1). Preserve facial identity, skin texture, glasses, beard, expression, black T-shirt, pose and square crop. No beautification, medical clothing, text or added objects.

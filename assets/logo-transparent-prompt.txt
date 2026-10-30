@@ -1,0 +1,1 @@
+Built-in image generation edit. Extract the right-hand Your Dental Clinic logo from the supplied variations sheet. Preserve script Your, smaller Smile endorsement, golden arc, spaced DENTAL CLINIC descriptor, colors and proportions. Remove ivory background, divider and left logo. Output transparent-alpha PNG with no added rectangle or shadow.
