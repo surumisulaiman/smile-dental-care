@@ -1,0 +1,1 @@
+Built-in image generation. Reference: supplied logo-variations.png. Two separate transparent PNG extracts: primary left lockup and alternate right lockup. Preserve letter shapes, descriptor and gold arc, flat teal and gold, no background or visual effects. Two further edits: change teal lettering to warm ivory while retaining gold arc and actual alpha transparency.
