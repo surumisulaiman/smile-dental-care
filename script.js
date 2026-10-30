@@ -24,7 +24,7 @@ const clinicData = {
  cheranalloor:{label:'CHERANALLOOR',html:'<p class="contact-address"><strong>Your Dental Clinic</strong><br>Cheranalloor, Kochi, Kerala</p><p class="contact-landmark">Please call to confirm the exact address and current opening hours.</p><a class="contact-detail" href="tel:+917558803737">+91 75588 03737 ↗</a><a class="button" href="tel:+917558803737">Call Cheranalloor clinic <span>↗</span></a>'}
 };
 const selector = document.querySelector('#clinic-selector');
-function selectClinic(value){const hero=document.querySelector('#family-hero-image');if(hero){hero.src=value==='cheranalloor'?'assets/cheranalloor-mother-daughter.png':'assets/modern-kerala-family.png';hero.alt=value==='cheranalloor'?'Illustrative Kerala mother and daughter sharing a relaxed moment at home':'Illustrative modern Kerala family sharing a relaxed moment at home';}document.body.classList.toggle('anna-first',value==='cheranalloor');const approach=document.querySelector('#approach-image');if(approach){approach.src=value==='cheranalloor'?'assets/reception-your-dental-clinic-natural.png':'assets/reception-your-smile-natural.png';approach.alt=value==='cheranalloor'?'Illustrative Your Dental Clinic reception':'Illustrative Your Smile reception';}const reception=document.querySelector('#reception-image');if(reception){reception.src=value==='cheranalloor'?'assets/reception-your-dental-clinic-natural.png':'assets/reception-your-smile-natural.png';reception.alt=value==='cheranalloor'?'Illustrative reception concept with Your Dental Clinic logo':'Illustrative reception concept with Your Smile logo';}const data=clinicData[value] || clinicData.chittoor;document.querySelector('#selected-clinic-label').textContent=value==='cheranalloor'?'Cheranalloor':'South Chittoor';document.querySelectorAll('[data-clinic-option]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.clinicOption===value)));document.querySelector('#contact-eyebrow').textContent=`YOUR CLINIC · ${data.label}`;document.querySelector('#contact-content').innerHTML=data.html;document.querySelector('#contact-content').classList.add('contact-content');document.querySelectorAll('[data-clinic]').forEach(card=>card.classList.toggle('selected',card.dataset.clinic===value));try{sessionStorage.setItem('smile-clinic',value);}catch{}}
+function selectClinic(value){const hero=document.querySelector('#family-hero-image');if(hero){hero.src=value==='cheranalloor'?'assets/cheranalloor-mother-daughter.png':'assets/modern-kerala-family.png';hero.alt=value==='cheranalloor'?'Illustrative Kerala mother and daughter sharing a relaxed moment at home':'Illustrative modern Kerala family sharing a relaxed moment at home';}document.body.classList.toggle('anna-first',value==='cheranalloor');const approach=document.querySelector('#approach-image');if(approach){approach.src=value==='cheranalloor'?'assets/treatment-cheranalloor.png':'assets/treatment-chittoor.png';approach.alt=value==='cheranalloor'?'Illustrative Cheranalloor dental treatment room':'Illustrative South Chittoor dental treatment room';}const reception=document.querySelector('#reception-image');if(reception){reception.src=value==='cheranalloor'?'assets/reception-your-dental-clinic-natural.png':'assets/reception-your-smile-natural.png';reception.alt=value==='cheranalloor'?'Illustrative reception concept with Your Dental Clinic logo':'Illustrative reception concept with Your Smile logo';}const data=clinicData[value] || clinicData.chittoor;document.querySelector('#selected-clinic-label').textContent=value==='cheranalloor'?'Cheranalloor':'South Chittoor';document.querySelectorAll('[data-clinic-option]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.clinicOption===value)));document.querySelector('#contact-eyebrow').textContent=`YOUR CLINIC · ${data.label}`;document.querySelector('#contact-content').innerHTML=data.html;document.querySelector('#contact-content').classList.add('contact-content');document.querySelectorAll('[data-clinic]').forEach(card=>card.classList.toggle('selected',card.dataset.clinic===value));try{sessionStorage.setItem('smile-clinic',value);}catch{}}
 const clinicPopover=document.querySelector('#clinic-popover');
 function closeClinicPopover(returnFocus=false){clinicPopover.hidden=true;selector.setAttribute('aria-expanded','false');if(returnFocus)selector.focus();}
 selector.addEventListener('click',()=>{const open=selector.getAttribute('aria-expanded')!=='true';clinicPopover.hidden=!open;selector.setAttribute('aria-expanded',String(open));if(open)dropdowns.forEach(dropdown=>dropdown.open=false);});
@@ -41,3 +41,22 @@ const info={privacy:['Privacy information','This website does not collect appoin
 document.querySelectorAll('[data-info]').forEach(button=>button.addEventListener('click',()=>{const [title,body]=info[button.dataset.info];infoDialog.querySelector('h2').textContent=title;infoDialog.querySelector('p').textContent=body;infoDialog.showModal();}));
 infoDialog.querySelector('.dialog-close').addEventListener('click',()=>infoDialog.close());
 document.querySelector('#year').textContent=new Date().getFullYear();
+
+// Reveal the floating mobile booking action only after the hero action scrolls away.
+const floatingBooking = document.querySelector('.mobile-booking');
+const heroBooking = document.querySelector('.hero-buttons');
+if (floatingBooking && heroBooking) {
+  const mobileViewport = matchMedia('(max-width: 767px)');
+  function updateFloatingBooking() {
+    const passedHero = heroBooking.getBoundingClientRect().bottom <= 0;
+    const visible = mobileViewport.matches && passedHero;
+    floatingBooking.classList.toggle('is-visible', visible);
+    floatingBooking.inert = !visible;
+    floatingBooking.setAttribute('aria-hidden', String(!visible));
+    if (!visible) floatingBooking.querySelectorAll('details').forEach(details => details.open = false);
+  }
+  new IntersectionObserver(updateFloatingBooking, {threshold: [0, 1]}).observe(heroBooking);
+  addEventListener('scroll', updateFloatingBooking, {passive: true});
+  addEventListener('resize', updateFloatingBooking);
+  updateFloatingBooking();
+}
